@@ -1,0 +1,7 @@
+.github
+node_modules
+src
+.gitignore
+tsconfig.json
+tsconfig-cjs.json
+tsconfig-esm.json
