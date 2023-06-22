@@ -1,5 +1,5 @@
-import { Observable } from './types.js'
-import { dispose } from './util.js'
+import { Observable } from './types'
+import { dispose } from './util'
 
 /**
  * Applies a given transform function to each value emitted by the source

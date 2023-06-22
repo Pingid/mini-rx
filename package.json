@@ -1,28 +1,37 @@
 {
   "name": "mini-rx",
-  "version": "0.0.0-dev.4",
+  "version": "0.0.0-dev.5",
   "description": "A mini reactive programming library",
-  "main": "lib/cjs/index.js",
-  "typings": "lib/esm/index.d.ts",
-  "module": "lib/esm/index.js",
+  "main": "lib/index.js",
+  "typings": "lib/index.d.ts",
+  "module": "lib/esm/index.mjs",
   "author": "Dan Beaven <dm.beaven@gmail.com>",
   "repository": {
     "type": "git",
     "url": "https://github.com/Pingid/mini-rx"
   },
-  "type": "module",
   "license": "MIT",
   "sideEffects": false,
   "exports": {
     ".": {
-      "require": "./lib/cjs/index.js",
-      "types": "./lib/esm/index.d.ts",
-      "import": "./lib/esm/index.js"
+      "types": "./lib/index.d.ts",
+      "import": {
+        "types": "./lib/esm/index.d.mts",
+        "default": "./lib/esm/index.mjs"
+      },
+      "module": "./lib/esm/index.js",
+      "default": "./lib/index.js",
+      "require": "./lib/index.js"
     },
     "./dom": {
-      "require": "./lib/cjs/dom.js",
-      "types": "./lib/esm/dom.d.ts",
-      "import": "./lib/esm/dom.js"
+      "types": "./lib/dom.d.ts",
+      "import": {
+        "types": "./lib/esm/dom.d.mts",
+        "default": "./lib/esm/dom.mjs"
+      },
+      "module": "./lib/esm/dom.js",
+      "default": "./lib/dom.js",
+      "require": "./lib/dom.js"
     },
     "./package.json": "./package.json"
   },
@@ -43,7 +52,7 @@
     "Observable"
   ],
   "scripts": {
-    "build": "tsc -p tsconfig-cjs.json && tsc -p tsconfig-esm.json",
+    "build": "node build.js",
     "test": "vitest"
   },
   "devDependencies": {
