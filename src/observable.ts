@@ -1,5 +1,5 @@
-import { Observable, TypeofObservable } from './types.js'
-import { dispose, pipe } from './util.js'
+import { Observable, TypeofObservable } from './types'
+import { dispose, pipe } from './util'
 
 /**
  * Converts the arguments to an observable sequence.
