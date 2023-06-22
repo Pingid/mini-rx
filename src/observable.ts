@@ -16,6 +16,22 @@ export const of: <T extends any[]>(...args: T) => Observable<T[number]> =
     return () => (subbed = false)
   }
 
+/**
+ * Creates an output Observable which concurrently emits all values from every
+ * given input Observable.
+ *
+ * @param {...ObservableInput} observables Input Observables to merge together.
+ * @return {Observable} an Observable that emits items that are the result of
+ * every input Observable.
+ */
+export const merge: <A extends Observable<any>[]>(...sources: A) => Observable<TypeofObservable<A[number]>> =
+  (...oas) =>
+  (sub) =>
+    pipe(
+      oas.map((x) => x(sub as any)),
+      (s) => () => void s.forEach((fn) => fn()),
+    )
+
 export const fromInterval: {
   (x: number): Observable<number>
 } = (x) => (sub) => {
@@ -47,14 +63,6 @@ export const fromAnimationFrame: {
   f = requestAnimationFrame(frame)
   return () => cancelAnimationFrame(f)
 }
-
-export const merge: <A extends any>(...oas: Observable<A>[]) => Observable<A> =
-  (...oas) =>
-  (sub) =>
-    pipe(
-      oas.map((x) => x(sub)),
-      (s) => () => void s.forEach((fn) => fn()),
-    )
 
 export const distinct: {
   <A>(): (oa: Observable<A>) => Observable<A>
