@@ -1,9 +1,9 @@
 {
   "name": "mini-rx",
-  "version": "0.0.0-dev.2",
+  "version": "0.0.0-dev.3",
   "description": "A mini reactive programming library",
   "main": "lib/cjs/index.js",
-  "typings": "lib/cjs/index.d.ts",
+  "typings": "lib/esm/index.d.ts",
   "module": "lib/esm/index.js",
   "author": "Dan Beaven <dm.beaven@gmail.com>",
   "repository": {
@@ -14,13 +14,13 @@
   "sideEffects": false,
   "exports": {
     ".": {
-      "types": "./lib/cjs/index.d.ts",
       "require": "./lib/cjs/index.js",
+      "types": "./lib/esm/index.d.ts",
       "import": "./lib/esm/index.js"
     },
     "./dom": {
-      "types": "./lib/cjs/dom.d.ts",
       "require": "./lib/cjs/dom.js",
+      "types": "./lib/esm/dom.d.ts",
       "import": "./lib/esm/dom.js"
     },
     "./package.json": "./package.json"

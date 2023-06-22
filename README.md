@@ -1,28 +1,43 @@
-# Mini RX
-This is a tiny reactive library which defines helpers for use on the observable type `type Observable<T> = (sub: (x: T) => void) => () => void`. Many of the helpers are copied from [rxjs](https://github.com/ReactiveX/rxjs)
+A small barebones reactive library built for a stripped back observable primitive. The api and method names are borrowed from [rxjs](https://github.com/ReactiveX/rxjs).
 
-# Examples
+
+[![Build Status](https://img.shields.io/github/actions/workflow/status/Pingid/mini-rx/test.yml?branch=main&style=flat&colorA=000000&colorB=000000)](https://github.com/Pingid/mini-rx/actions?query=workflow:Test)
+[![Build Size](https://img.shields.io/bundlephobia/minzip/mini-rx?label=bundle%20size&style=flat&colorA=000000&colorB=000000)](https://bundlephobia.com/result?p=mini-rx)
+[![Version](https://img.shields.io/npm/v/mini-rx?style=flat&colorA=000000&colorB=000000)](https://www.npmjs.com/package/mini-rx)
+[![Downloads](https://img.shields.io/npm/dt/mini-rx.svg?style=flat&colorA=000000&colorB=000000)](https://www.npmjs.com/package/mini-rx)
+
+```bash
+npm install mini-rx # or yarn add mini-rx or pnpm add mini-rx
+```
+
+## Observable
+Unlike [rxjs](https://github.com/ReactiveX/rxjs) this observable provides no error pathway and never completes.
+```ts
+type Observable<T> = (subscriber: (x: T) => void): () => void
+```
+
+**Example Usage**
 ```typescript
-import { pipe, from, map, scan, merge, switchMap, fromInterval } from 'mini-rx'
+import { pipe, merge, map, of, switchMap  } from 'mini-rx'
 import { fromEvent } from 'mini-rx/dom'
 
-const $clicks = fromEvent(document.body, 'click')
-const $total_clicks = pipe($clicks, scan(0, (t) => t + 1))
+const box = document.getElementById('#box');
 
-const $mouse_is_down = pipe(
+const $pointer_over = pipe(
   merge(
-    pipe(fromEvent('mousedown'), map(() => true)),
-    pipe(fromEvent('mouseup'), map(() => false))
+    pipe(fromEvent(box, 'pointerenter'), map(() => true)),
+    pipe(fromEvent(box, 'pointerleave'), map(() => false))
   ),
 )
 
-const $mouse_position = pipe(
-  fromEvent('mousemove'),
-  map(e => ({ x: e.clientX, y: e.clientY })),
+// Get the pointer position when pointer is over box
+const $pointer_position = pipe(
+  $pointer_over,
+  switchMap(is_over => is_over ? fromEvent(box, 'pointermove') : of()),
+  map(e => ({ x: e.clientX, y: e.clientY }))
 )
 
-const $mouse_position_when_mouse_down = pipe(
-  $mouseIsDown,
-  switchMap(x => x ? from() : $mousePosition)
-)
+// Subscribe to events
+$pointer_over((x: boolean) => ...)
+$pointer_position((x: { x: nunber, y: number }) => ...)
 ```

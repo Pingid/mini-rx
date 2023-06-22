@@ -1,7 +1,7 @@
 {
   "name": "min-rx/dom",
-  "types": "../lib/cjs/dom.d.ts",
   "main": "../lib/cjs/dom.js",
+  "types": "../lib/esm/dom.d.ts",
   "module": "../lib/esm/dom.js",
   "sideEffects": false
 }

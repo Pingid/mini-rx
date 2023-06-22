@@ -1,6 +1,7 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
+    "declaration": true /* Generate .d.ts files from TypeScript and JavaScript files in your project. */,
     "module": "ESNext",
     "target": "ESNext",
     "moduleResolution": "NodeNext",
