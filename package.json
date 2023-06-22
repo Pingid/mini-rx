@@ -1,6 +1,6 @@
 {
   "name": "mini-rx",
-  "version": "0.0.0-dev.3",
+  "version": "0.0.0-dev.4",
   "description": "A mini reactive programming library",
   "main": "lib/cjs/index.js",
   "typings": "lib/esm/index.d.ts",
@@ -10,6 +10,7 @@
     "type": "git",
     "url": "https://github.com/Pingid/mini-rx"
   },
+  "type": "module",
   "license": "MIT",
   "sideEffects": false,
   "exports": {

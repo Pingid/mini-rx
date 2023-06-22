@@ -1,4 +1,4 @@
-import { Observable } from './types'
+import { Observable } from './types.js'
 
 type NonEmpty<T> = [keyof T, ...(keyof T)[]]
 
