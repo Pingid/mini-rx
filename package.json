@@ -1,6 +1,6 @@
 {
   "name": "mini-rx",
-  "version": "0.0.0-dev.1",
+  "version": "0.0.0-dev.2",
   "description": "A mini reactive programming library",
   "main": "lib/cjs/index.js",
   "typings": "lib/cjs/index.d.ts",
@@ -25,11 +25,21 @@
     },
     "./package.json": "./package.json"
   },
+  "files": [
+    "lib",
+    "src",
+    "dom",
+    "README.md",
+    "package.json",
+    "!**/*.test.*",
+    "tsconfig.json"
+  ],
   "keywords": [
-    "rxjs",
-    "reactive",
-    "fp",
-    "functional"
+    "Rx",
+    "RxJS",
+    "ReactiveX",
+    "Observables",
+    "Observable"
   ],
   "scripts": {
     "build": "tsc -p tsconfig-cjs.json && tsc -p tsconfig-esm.json",

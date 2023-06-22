@@ -1,6 +1,8 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
+    "declaration": true /* Generate .d.ts files from TypeScript and JavaScript files in your project. */,
+    "sourceMap": true /* Create source map files for emitted JavaScript files. */,
     "module": "CommonJS",
     "target": "ES2015",
     "moduleResolution": "classic",
