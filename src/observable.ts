@@ -1,31 +1,20 @@
-import { dispose, Disposable, pipe } from './util'
+import { dispose, pipe } from './util'
+import { Observable, TypeofObservable } from './types'
 
-export interface Observable<T> {
-  (sub: (x: T) => void): Disposable
-}
-export type Typeof<T> = T extends Observable<infer D> ? D : never
-
-/*
-  Creation
-*/
-export const from: {
-  (): Observable<never>
-  <T>(x: T): Observable<T>
-  <T>(...args: T[]): Observable<T>
-} =
+/**
+ * Converts the arguments to an observable sequence.
+ *
+ * @param {...T} values A comma separated list of arguments you want to be emitted
+ * @return {Observable} An Observable that emits the arguments
+ * described above and then completes.
+ */
+export const of: <T extends any[]>(...args: T) => Observable<T[number]> =
   (...args: any[]) =>
   (sub: any) => {
     let subbed = true
     args.forEach((x) => subbed && sub(x))
     return () => (subbed = false)
   }
-
-export const fromLazy: {
-  <T>(cb: () => T): Observable<T>
-} = (cb) => (sub) => {
-  sub(cb())
-  return () => {}
-}
 
 export const fromInterval: {
   (x: number): Observable<number>
@@ -59,69 +48,11 @@ export const fromAnimationFrame: {
   return () => cancelAnimationFrame(f)
 }
 
-/*
-  Transformation
-*/
-export const map: <A, B>(transform: (a: A) => B) => (ob: Observable<A>) => Observable<B> =
-  (transform) => (ob) => (sub) =>
-    ob((x) => sub(transform(x)))
-
-export const switchMap =
-  <A, B>(transform: (a: A) => Observable<B>) =>
-  (oa: Observable<A>): Observable<B> => {
-    let last = () => {}
-    return (sub) => {
-      const current = oa((x) => {
-        last()
-        last = transform(x)((y) => sub(y))
-      })
-      return () => (last(), current())
-    }
-  }
-
-export const filter: {
-  <A, B extends A = A>(predicate: (a: A) => a is B): (oa: Observable<A>) => Observable<B>
-  <A, B extends A = A>(predicate: (a: A) => boolean): (oa: Observable<A>) => Observable<B>
-} =
-  (pred) =>
-  (oa) =>
-  (sub = (_x) => {}) =>
-    oa((x: any) => (pred(x) ? sub(x) : null))
-
-export const scan =
-  <A, B>(initial: A, transform: (a: A, b: B) => A) =>
-  (ob: Observable<B>): Observable<A> => {
-    let c = initial
-    return (sub) => ob((x) => pipe((c = transform(c, x)), () => sub(c)))
-  }
-
-export const switchScan =
-  <A, B>(initial: A, cb: (a: A, b: B) => Observable<A>) =>
-  (ob: Observable<B>): Observable<A> => {
-    let c = initial
-    return (sub) => {
-      let last = () => {}
-      return dispose(
-        ob((x) => {
-          last()
-          last = cb(
-            c,
-            x,
-          )((a) => {
-            c = a
-            sub(a)
-          })
-        }),
-        last,
-      )
-    }
-  }
-
-export const merge: <A extends any>(...oas: Observable<A>[] | Observable<A>[][]) => Observable<A> =
+export const merge: <A extends any>(...oas: Observable<A>[]) => Observable<A> =
   (...oas) =>
   (sub) =>
     pipe(
-      oas.flat(2).map((x) => x(sub)),
+      oas.map((x) => x(sub)),
       (s) => () => void s.forEach((fn) => fn()),
     )
 
@@ -166,13 +97,13 @@ export const throttle =
     }, oa)
 
 export const join: {
-  <T extends readonly Observable<any>[]>(x: T): Observable<{ [K in keyof T]?: Typeof<T[K]> }>
-  <T extends readonly Observable<any>[]>(x: T, i: { [K in keyof T]: Typeof<T[K]> }): Observable<{
-    [K in keyof T]: Typeof<T[K]>
+  <T extends readonly Observable<any>[]>(x: T): Observable<{ [K in keyof T]?: TypeofObservable<T[K]> }>
+  <T extends readonly Observable<any>[]>(x: T, i: { [K in keyof T]: TypeofObservable<T[K]> }): Observable<{
+    [K in keyof T]: TypeofObservable<T[K]>
   }>
-  <T extends { [x: string]: Observable<any> }>(x: T): Observable<{ [K in keyof T]?: Typeof<T[K]> }>
-  <T extends { [x: string]: Observable<any> }>(x: T, i: { [K in keyof T]: Typeof<T[K]> }): Observable<{
-    [K in keyof T]: Typeof<T[K]>
+  <T extends { [x: string]: Observable<any> }>(x: T): Observable<{ [K in keyof T]?: TypeofObservable<T[K]> }>
+  <T extends { [x: string]: Observable<any> }>(x: T, i: { [K in keyof T]: TypeofObservable<T[K]> }): Observable<{
+    [K in keyof T]: TypeofObservable<T[K]>
   }>
 } = (x: any, init?: any) => (cb: any) => {
   if (Array.isArray(x)) {

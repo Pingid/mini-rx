@@ -12,17 +12,12 @@ on:
 jobs:
   create_release:
     name: Create release
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
-      - name: checkout
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
         with:
-          persist-credentials: false
-      - name: setup node version
-        uses: actions/setup-node@v2
-        with:
-          cache: 'yarn'
-          node-version: '16'
+          node-version: 18
       - name: install dependencies
         run: yarn install
       - name: transpile typescript
@@ -37,7 +32,7 @@ jobs:
           view_top: 1
       - name: Get current version
         id: current_version
-        run: echo "::set-output name=version::$(node -e 'console.log(require(`./package.json`).version)')"
+        run: echo "version=$(node -e 'console.log(require(`./package.json`).version)')" >> $GITHUB_OUTPUT
       - name: Create a new release
         uses: softprops/action-gh-release@v1
         if: ${{ steps.latest_release_tag.outputs.tag_name != steps.current_version.outputs.version }}
