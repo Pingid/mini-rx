@@ -1,6 +1,6 @@
 {
   "name": "mini-rx",
-  "version": "0.0.0-dev.5",
+  "version": "0.0.1",
   "description": "A mini reactive programming library",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",

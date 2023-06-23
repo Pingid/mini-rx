@@ -1,5 +1,4 @@
 import { Observable } from './types'
-import { dispose } from './util'
 
 /**
  * Applies a given transform function to each value emitted by the source
@@ -87,25 +86,3 @@ export const scan: <A, B>(initial: A, accumulator: (a: A, b: B) => A) => (source
 export const tap: <A>(operator: (a: A) => any) => (source: Observable<A>) => Observable<A> =
   (operator) => (ob) => (sub) =>
     ob((x) => (operator(x), sub(x)))
-
-export const switchScan =
-  <A, B>(initial: A, cb: (a: A, b: B) => Observable<A>) =>
-  (ob: Observable<B>): Observable<A> => {
-    let c = initial
-    return (sub) => {
-      let last = () => {}
-      return dispose(
-        ob((x) => {
-          last()
-          last = cb(
-            c,
-            x,
-          )((a) => {
-            c = a
-            sub(a)
-          })
-        }),
-        last,
-      )
-    }
-  }

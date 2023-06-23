@@ -40,15 +40,6 @@ it('scan', () => {
   expect(get()).toEqual([10, 21, 33])
 })
 
-it('switchScan', () => {
-  const [get, sub] = collect<number>()
-  pipe(
-    of(10, 11, 12),
-    switchScan(0, (a, b) => of(a + b)),
-  )(sub)
-  expect(get()).toEqual([10, 21, 33])
-})
-
 const collect = <T>() => {
   const values: T[] = []
   return [() => values, (y: T) => values.push(y)] as const
