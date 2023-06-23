@@ -40,3 +40,6 @@ const $pointer_position = pipe(
 $pointer_over((x: boolean) => ...)
 $pointer_position((x: { x: nunber, y: number }) => ...)
 ```
+
+## License
+MIT © [Dan Beaven](https://github.com/Pingid)
