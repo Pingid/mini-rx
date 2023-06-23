@@ -76,6 +76,18 @@ export const scan: <A, B>(initial: A, accumulator: (a: A, b: B) => A) => (source
       })
   }
 
+/**
+ * Used to perform side-effects for notifications from the source observable
+ *
+ * @param operator A callback to execute every type source observable emits
+ *
+ * @return A function that returns an Observable identical to the source, but
+ * runs the specified Observer or callback(s) for each item.
+ */
+export const tap: <A>(operator: (a: A) => any) => (source: Observable<A>) => Observable<A> =
+  (operator) => (ob) => (sub) =>
+    ob((x) => (operator(x), sub(x)))
+
 export const switchScan =
   <A, B>(initial: A, cb: (a: A, b: B) => Observable<A>) =>
   (ob: Observable<B>): Observable<A> => {
