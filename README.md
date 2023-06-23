@@ -16,7 +16,7 @@ Unlike [rxjs](https://github.com/ReactiveX/rxjs) this observable provides no err
 type Observable<T> = (subscriber: (x: T) => void): () => void
 ```
 
-**Example Usage**
+## Usage
 ```typescript
 import { pipe, merge, map, of, switchMap, fromEvent  } from 'mini-rx'
 
