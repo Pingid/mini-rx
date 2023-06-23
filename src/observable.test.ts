@@ -1,6 +1,6 @@
-import { it, expect } from 'vitest'
+import { it, expect, vi } from 'vitest'
 
-import { of, merge, fromInterval, fromPromise, distinct } from './observable'
+import { of, merge, fromEvent, distinct } from './observable'
 import { pipe } from './util'
 
 it('of', () => {
@@ -9,19 +9,22 @@ it('of', () => {
   expect(get()).toEqual([10])
 })
 
-it('fromPromise', async () => {
-  const [get, sub] = collect<number | null>()
-  fromPromise(() => Promise.resolve(10))((x) => sub(x[0]))
-  await Promise.resolve()
-  expect(get()).toEqual([10])
+it('fromEvent dom event target', async () => {
+  const [addEventListener, removeEventListener, listener] = [vi.fn(), vi.fn(), vi.fn()]
+  const stop = fromEvent({ addEventListener, removeEventListener } as any as Document, 'abort', { passive: true })(
+    listener,
+  )
+  expect(addEventListener.mock.calls).toEqual([['abort', listener, { passive: true }]])
+  stop()
+  expect(removeEventListener.mock.calls).toEqual([['abort', listener, { passive: true }]])
 })
 
-it('fromInterval', async () => {
-  const [get, sub] = collect<number>()
-  const stop = fromInterval(10)(sub)
-  await new Promise((res) => setTimeout(res, 100))
+it('fromEvent node event emmitter target', async () => {
+  const [addListener, removeListener, listener] = [vi.fn(), vi.fn(), vi.fn()]
+  const stop = fromEvent({ addListener, removeListener }, 'abort')(listener)
+  expect(addListener.mock.calls).toEqual([['abort', listener, undefined]])
   stop()
-  expect(get()).toEqual([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
+  expect(removeListener.mock.calls).toEqual([['abort', listener, undefined]])
 })
 
 it('merge', () => {

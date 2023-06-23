@@ -18,10 +18,9 @@ type Observable<T> = (subscriber: (x: T) => void): () => void
 
 **Example Usage**
 ```typescript
-import { pipe, merge, map, of, switchMap  } from 'mini-rx'
-import { fromEvent } from 'mini-rx/dom'
+import { pipe, merge, map, of, switchMap, fromEvent  } from 'mini-rx'
 
-const box = document.getElementById('#box');
+const box = document.getElementById('#box')!;
 
 const $pointer_over = pipe(
   merge(
