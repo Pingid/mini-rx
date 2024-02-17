@@ -2,11 +2,11 @@ import { Observable, TypeofObservable } from './types'
 import { dispose, pipe } from './util'
 
 /**
- * Converts the arguments to an observable sequence.
- *
- * @param {...T} values A comma separated list of arguments you want to be emitted
- * @return {Observable} An Observable that emits the arguments
- * described above and then completes.
+ * The above function is a TypeScript implementation of an Observable that takes in a variable number
+ * of arguments and emits each argument to its subscribers.
+ * @param {any[]} args - args is a rest parameter of type T, which is a generic array type that can
+ * contain any type of elements.
+ * @returns a function that takes a subscriber as an argument.
  */
 export const of: <T extends any[]>(...args: T) => Observable<T[number]> =
   (...args: any[]) =>
@@ -17,11 +17,25 @@ export const of: <T extends any[]>(...args: T) => Observable<T[number]> =
   }
 
 /**
+ * Converts the arguments to an observable sequence.
+ *
+ * @param {...T} values A comma separated list of arguments you want to be emitted
+ * @return {Observable} An Observable that emits the arguments
+ * described above and then completes.
+ */
+
+/**
  * Creates an Observable from an Array, an array-like object, a Promise, an iterable object, or an Observable-like object.
  *
  * @param {ObservableInput<T>} A subscription object, a Promise, an Array, a Map or a String.
  *
  * @return {Observable<T>}
+ */
+
+/**
+ * The `from` function converts various types of input into an Observable.
+ * @param {any} input - The `input` parameter can be of type `Array`, `Promise`, or `Map`.
+ * @returns an Observable.
  */
 export const from: {
   <T extends any[]>(input: T): Observable<T[number]>
@@ -50,6 +64,23 @@ export const from: {
  * @param {EventListenerOptions} [options] Options to pass through to addEventListener
  *
  * @return {Observable<T>}
+ */
+
+/**
+ * The `fromEvent` function is a TypeScript implementation that creates an Observable from an event
+ * emitted by a target element, window, document, document fragment, or shadow root.
+ * @param {any} target - The target parameter represents the element or object to which the event
+ * listener will be attached. It can be an HTMLElement, Window, Document, DocumentFragment, ShadowRoot,
+ * or any object that implements the NodeStyleEventEmitter interface.
+ * @param {any} event - The `event` parameter is the name of the event that you want to listen for. It
+ * can be a string representing the event name (e.g., "click", "keydown") or a symbol representing a
+ * custom event.
+ * @param {any} [options] - The `options` parameter is an optional argument that specifies additional
+ * options for the event listener. It can be a boolean value or an `AddEventListenerOptions` object.
+ * The `AddEventListenerOptions` object allows you to specify options such as `capture`, `once`, and
+ * `passive`.
+ * @returns The `fromEvent` function returns a function that takes in a target, event, and options, and
+ * returns an Observable.
  */
 export const fromEvent: {
   <T extends HTMLElement, E extends keyof HTMLElementEventMap>(
